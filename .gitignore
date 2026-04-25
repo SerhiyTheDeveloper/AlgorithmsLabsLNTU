@@ -1,0 +1,13 @@
+﻿# Visual Studio junk
+.vs/
+x64/
+Debug/
+Release/
+*.obj
+*.pdb
+*.exe
+*.log
+*.ilk
+*.suo
+*.user
+*.opendb
