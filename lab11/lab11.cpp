@@ -1,20 +1,142 @@
-// lab11.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
+#include "Node.h"
+#include "BinarySearchTree.h"
+#include <chrono>
+#include <functional>
+
+using namespace std;
+using namespace chrono;
+
+static void measureTime(const string& title, function<void()> func) {
+	auto start = high_resolution_clock::now();
+	func();
+	auto stop = high_resolution_clock::now();
+
+	auto duration = duration_cast<nanoseconds>(stop - start);
+	cout << title << ": " << duration.count() << " nanoseconds" << endl;
+}
+
+template <typename T>
+static void preorderConsole(Node<T>* node) {
+    if (node == nullptr) return;
+	cout << node->data << " ";
+	preorderConsole(node->left);
+	preorderConsole(node->right);
+}
+
+template <typename T>
+static void inorderConsole(Node<T>* node) {
+	if (node == nullptr) return;
+	inorderConsole(node->left);
+	cout << node->data << " ";
+	inorderConsole(node->right);
+}
+
+template <typename T>
+static void postorderConsole(Node<T>* node) {
+	if (node == nullptr) return;
+	postorderConsole(node->left);
+	postorderConsole(node->right);
+	cout << node->data << " ";
+}
+
+static void preorder(Node<int>* node) {
+	long long sum = 0;
+	if (node == nullptr) return;
+	sum += node->data;
+	preorder(node->left);
+	preorder(node->right);
+}
+
+static void inorder(Node<int>* node) {
+	long long sum = 0;
+	if (node == nullptr) return;
+	inorder(node->left);
+	sum += node->data;
+	inorder(node->right);
+}
+
+static void postorder(Node<int>* node) {
+	long long sum = 0;
+	if (node == nullptr) return;
+	postorder(node->left);
+	postorder(node->right);
+	sum += node->data;
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	srand(time(0));
+
+	BinarySearchTree<int> smallTree;
+	BinarySearchTree<int> bigTree;
+
+	// Заміри для малого дерева (10 елементів)
+	cout << "----- Small tree (10 elements) -----" << endl;
+
+	measureTime("Insert 10 elements", [&]() {
+		for (int i = 0; i < 9; i++) {
+			smallTree.insert(rand() % 100);
+		}
+		smallTree.insert(50);
+	});
+
+	cout << endl;
+	measureTime("- Preorder in Console", [&]() {
+		preorderConsole(smallTree.getRoot());
+	});
+	measureTime("- Inorder in Console", [&]() {
+		inorderConsole(smallTree.getRoot());
+	});
+	measureTime("- Postorder in Console", [&]() {
+		postorderConsole(smallTree.getRoot());
+	});
+	measureTime("Preorder Traversal", [&]() {
+		preorder(smallTree.getRoot());
+	});
+	measureTime("Inorder Traversal", [&]() {
+		inorder(smallTree.getRoot());
+	});
+	measureTime("Postorder Traversal", [&]() {
+		postorder(smallTree.getRoot());
+	});
+	cout << endl;
+
+	measureTime("Search for 50", [&]() {
+		smallTree.search(50);
+	});
+	measureTime("Remove 50", [&]() {
+		smallTree.remove(50);
+	});
+
+	// Заміри для великого дерева (10000 елементів)
+	cout << endl << "----- Big tree (10000 elements) -----" << endl;
+
+	measureTime("Insert 10000 elements", [&]() {
+		for (int i = 0; i < 9999; i++) {
+			bigTree.insert(rand() % 10000);
+		}
+		bigTree.insert(5001);
+	});
+
+	cout << endl;
+	measureTime("Preorder Traversal", [&]() {
+		preorder(bigTree.getRoot());
+	});
+	measureTime("Inorder Traversal", [&]() {
+		inorder(bigTree.getRoot());
+	});
+	measureTime("Postorder Traversal", [&]() {
+		postorder(bigTree.getRoot());
+	});
+	cout << endl;
+
+	measureTime("Search for 5001", [&]() {
+		bigTree.search(5001);
+	});
+	measureTime("Remove 5001", [&]() {
+		bigTree.remove(5001);
+	});
+
+	return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
