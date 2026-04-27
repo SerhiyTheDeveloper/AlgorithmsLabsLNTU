@@ -15,6 +15,10 @@ private:
 public:
 	BinarySearchTree() : root(nullptr) {}
 
+	Node<T>* getRoot() const {
+		return root;
+	}
+
 	void insert(const T& value) {
 		if (root == nullptr) {
 			root = new Node<T>(value);
@@ -25,15 +29,15 @@ public:
 		while (true) {
 			if (value <= baseNode->data) {
 				if (baseNode->left == nullptr) {
-					baseNode->left = new Node<T>(value)
-						return;
+					baseNode->left = new Node<T>(value);
+					return;
 				}
 				baseNode = baseNode->left;
 			}
 			else {
 				if (baseNode->right == nullptr) {
-					baseNode->right = new Node<T>(value)
-						return;
+					baseNode->right = new Node<T>(value);
+					return;
 				}
 				baseNode = baseNode->right;
 			}
