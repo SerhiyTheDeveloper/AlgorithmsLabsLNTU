@@ -32,7 +32,7 @@ public:
         return std::find(list[u].begin(), list[u].end(), v) != list[u].end();
     }
 
-    std::vector<int> getNeighbors(int u) const {
+    const std::vector<int>& getNeighbors(int u) const {
         if (u < 0 || u >= size) throw std::out_of_range("Vertex index out of bounds.");
         return list[u];
     }
